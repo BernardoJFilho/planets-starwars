@@ -24,6 +24,7 @@ export default function AppTable({ children }) {
   const values = useMemo(() => ({
     isApi, setIsApi, isName, handleChange,
   }), [isApi, isName]);
+
   return (
     <AppContext.Provider value={ values }>
       { children }

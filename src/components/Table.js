@@ -17,7 +17,7 @@ export default function Table() {
           <th>Gravidade</th>
           <th>Terreno</th>
           <th>Superfice de agua</th>
-          <th>Filme</th>
+          <th>Filmes</th>
           <th>População</th>
           <th>Criado</th>
           <th>Editado</th>
