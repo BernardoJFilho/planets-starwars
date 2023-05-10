@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 
 export default function Table() {
-  const { isApi } = useContext(AppContext);
+  const { isApi, isName } = useContext(AppContext);
 
   return (
     <>
@@ -23,23 +23,24 @@ export default function Table() {
           <th>Editado</th>
           <th>Url</th>
         </tr>
-        { isApi.map((param, index) => (
-          <tr key={ index }>
-            <td data-testid="planet-name">{param.name}</td>
-            <td>{param.rotation_period}</td>
-            <td>{param.orbital_period}</td>
-            <td>{param.diameter}</td>
-            <td>{param.climate}</td>
-            <td>{param.gravity}</td>
-            <td>{param.terrain}</td>
-            <td>{param.surface_water}</td>
-            <td>{param.films.map((film) => <p key={ film }>{film}</p>)}</td>
-            <td>{param.population}</td>
-            <td>{param.created}</td>
-            <td>{param.edited}</td>
-            <td>{param.url}</td>
-          </tr>
-        )) }
+        { isApi.filter(({ name }) => name.toLowerCase().includes(isName.toLowerCase()))
+          .map((param, index) => (
+            <tr key={ index }>
+              <td data-testid="planet-name">{param.name}</td>
+              <td>{param.rotation_period}</td>
+              <td>{param.orbital_period}</td>
+              <td>{param.diameter}</td>
+              <td>{param.climate}</td>
+              <td>{param.gravity}</td>
+              <td>{param.terrain}</td>
+              <td>{param.surface_water}</td>
+              <td>{param.films.map((film) => <p key={ film }>{film}</p>)}</td>
+              <td>{param.population}</td>
+              <td>{param.created}</td>
+              <td>{param.edited}</td>
+              <td>{param.url}</td>
+            </tr>
+          )) }
       </table>
     </>
   );
