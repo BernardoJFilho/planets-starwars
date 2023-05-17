@@ -2,7 +2,19 @@ import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 
 export default function Table() {
-  const { isApi, isName } = useContext(AppContext);
+  const { isApi, isNome, isBusca } = useContext(AppContext);
+
+  const filterArray = (array) => {
+    switch (isBusca.comparison) {
+    case 'maior que':
+      return Number(array[isBusca.column]) > Number(isBusca.number);
+    case 'menor que':
+      return Number(array[isBusca.column]) < Number(isBusca.number);
+    case 'igual a':
+      return Number(array[isBusca.column]) === Number(isBusca.number);
+    default:
+    }
+  };
 
   return (
     <>
@@ -23,7 +35,11 @@ export default function Table() {
           <th>Editado</th>
           <th>Url</th>
         </tr>
-        { isApi.filter(({ name }) => name.toLowerCase().includes(isName.toLowerCase()))
+        { isApi.filter(({ name }) => name.toLowerCase().includes(isNome.toLowerCase()))
+          .filter((element) => (
+            isBusca !== undefined
+              ? filterArray(element)
+              : element))
           .map((param, index) => (
             <tr key={ index }>
               <td data-testid="planet-name">{param.name}</td>
@@ -40,7 +56,7 @@ export default function Table() {
               <td>{param.edited}</td>
               <td>{param.url}</td>
             </tr>
-          )) }
+          ))}
       </table>
     </>
   );

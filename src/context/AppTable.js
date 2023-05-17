@@ -5,7 +5,8 @@ import getApi from '../api/api';
 
 export default function AppTable({ children }) {
   const [isApi, setIsApi] = useState([]);
-  const [isName, setIsName] = useState('');
+  const [isNome, setIsNome] = useState('');
+  const [isBusca, setIsBusca] = useState();
 
   const arrayApi = useCallback(async () => {
     const response = await getApi();
@@ -14,7 +15,7 @@ export default function AppTable({ children }) {
 
   const handleChange = ({ target }) => {
     const { value } = target;
-    setIsName(value);
+    setIsNome(value);
   };
 
   useEffect(() => {
@@ -22,8 +23,8 @@ export default function AppTable({ children }) {
   }, [arrayApi]);
 
   const values = useMemo(() => ({
-    isApi, setIsApi, isName, handleChange,
-  }), [isApi, isName]);
+    isApi, setIsApi, isNome, handleChange, setIsBusca, isBusca,
+  }), [isApi, isBusca, isNome]);
 
   return (
     <AppContext.Provider value={ values }>
