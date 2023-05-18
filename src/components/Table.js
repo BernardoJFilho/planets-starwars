@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import AppContext from '../context/AppContext';
 
 export default function Table() {
   const { isApi, isNome, isBusca } = useContext(AppContext);
+  const [filtered, setFiltered] = useState(isApi);
 
-  const filterArray = (array) => {
+  const filterArray = useCallback((array) => {
+    if (!isBusca || !isBusca.column) return;
     switch (isBusca.comparison) {
     case 'maior que':
       return Number(array[isBusca.column]) > Number(isBusca.number);
@@ -14,10 +16,42 @@ export default function Table() {
       return Number(array[isBusca.column]) === Number(isBusca.number);
     default:
     }
-  };
+  }, [isBusca]);
+
+  useEffect(() => {
+    if (!isBusca || !isBusca.column) return;
+    const result = filtered.filter(({ name }) => name.toLowerCase()
+      .includes(isNome.toLowerCase()));
+
+    const filterBusca = result.filter((array) => (
+      isBusca !== undefined
+        ? filterArray(array)
+        : array));
+    setFiltered(filterBusca);
+  }, [filterArray, isApi, isBusca, isNome]);
+
+  useEffect(() => {
+    if (filtered.length !== 0) return;
+    setFiltered(isApi);
+  }, [filtered.length, isApi]);
 
   return (
     <>
+      {/* {isBusca !== undefined ? test.map((param, index) => (
+        <div key={ index }>
+          Filtro
+          {' '}
+          {index}
+          :
+          <p>
+            {param.column}
+            {' '}
+            {param.comparison}
+            {' '}
+            {param.number}
+          </p>
+        </div>)) : null} */}
+      {/* {console.log(test[test.length - 1])} */}
       <div>Table</div>
       <table>
         <tr>
@@ -35,11 +69,7 @@ export default function Table() {
           <th>Editado</th>
           <th>Url</th>
         </tr>
-        { isApi.filter(({ name }) => name.toLowerCase().includes(isNome.toLowerCase()))
-          .filter((element) => (
-            isBusca !== undefined
-              ? filterArray(element)
-              : element))
+        { filtered
           .map((param, index) => (
             <tr key={ index }>
               <td data-testid="planet-name">{param.name}</td>

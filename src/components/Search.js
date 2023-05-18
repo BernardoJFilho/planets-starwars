@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react';
 import AppContext from '../context/AppContext';
 
 export default function Search() {
-  const [isSearch, setIsSearch] = useState({ column: 'population',
+  const [isSearch, setIsSearch] = useState({
+    column: 'population',
     comparison: 'maior que',
     number: 0,
   });
