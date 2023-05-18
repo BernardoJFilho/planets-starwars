@@ -2,20 +2,20 @@ import React, { useContext, useState } from 'react';
 import AppContext from '../context/AppContext';
 
 export default function Search() {
-  const [isSearch, setIsSearch] = useState({
+  const [search, setSearch] = useState({
     column: 'population',
     comparison: 'maior que',
     number: 0,
   });
-  const { isNome, handleChange, setIsBusca } = useContext(AppContext);
+  const { isNome, handleChange, setBusca } = useContext(AppContext);
 
   const buttonclick = () => {
-    setIsBusca(isSearch);
+    setBusca(search);
   };
 
   const onChangeFunc = ({ target }) => {
     const { name, value } = target;
-    setIsSearch((prev) => ({
+    setSearch((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -37,7 +37,7 @@ export default function Search() {
         <label>
           <select
             name="column"
-            value={ isSearch.column }
+            value={ search.column }
             data-testid="column-filter"
             onChange={ onChangeFunc }
           >
@@ -51,7 +51,7 @@ export default function Search() {
         <label>
           <select
             name="comparison"
-            value={ isSearch.comparison }
+            value={ search.comparison }
             data-testid="comparison-filter"
             onChange={ onChangeFunc }
           >
@@ -64,7 +64,7 @@ export default function Search() {
           <input
             type="number"
             data-testid="value-filter"
-            value={ isSearch.number }
+            value={ search.number }
             name="number"
             onChange={ onChangeFunc }
           />

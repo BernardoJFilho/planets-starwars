@@ -4,27 +4,27 @@ import AppContext from './AppContext';
 import getApi from '../api/api';
 
 export default function AppTable({ children }) {
-  const [isApi, setIsApi] = useState([]);
-  const [isNome, setIsNome] = useState('');
-  const [isBusca, setIsBusca] = useState();
+  const [api, setApi] = useState([]);
+  const [nome, setNome] = useState('');
+  const [busca, setBusca] = useState();
 
   const arrayApi = useCallback(async () => {
     const response = await getApi();
-    setIsApi(response);
+    setApi(response);
   }, []);
 
   const handleChange = ({ target }) => {
     const { value } = target;
-    setIsNome(value);
+    setNome(value);
   };
 
   useEffect(() => {
     arrayApi();
-  }, [arrayApi, isBusca]);
+  }, [arrayApi, setApi]);
 
   const values = useMemo(() => ({
-    isApi, setIsApi, isNome, handleChange, setIsBusca, isBusca,
-  }), [isApi, isBusca, isNome]);
+    api, setApi, nome, handleChange, busca, setBusca,
+  }), [api, busca, nome]);
 
   return (
     <AppContext.Provider value={ values }>

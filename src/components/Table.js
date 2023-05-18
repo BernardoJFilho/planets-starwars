@@ -2,38 +2,50 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import AppContext from '../context/AppContext';
 
 export default function Table() {
-  const { isApi, isNome, isBusca } = useContext(AppContext);
-  const [filtered, setFiltered] = useState(isApi);
+  const { api, nome, busca } = useContext(AppContext);
+  const [filtered, setFiltered] = useState(api);
+  // const [elemet, setElement] = useState(api);
 
   const filterArray = useCallback((array) => {
-    if (!isBusca || !isBusca.column) return;
-    switch (isBusca.comparison) {
+    if (!busca || !busca.column) return;
+    switch (busca.comparison) {
     case 'maior que':
-      return Number(array[isBusca.column]) > Number(isBusca.number);
+      return Number(array[busca.column]) > Number(busca.number);
     case 'menor que':
-      return Number(array[isBusca.column]) < Number(isBusca.number);
+      return Number(array[busca.column]) < Number(busca.number);
     case 'igual a':
-      return Number(array[isBusca.column]) === Number(isBusca.number);
+      return Number(array[busca.column]) === Number(busca.number);
     default:
     }
-  }, [isBusca]);
+  }, [busca]);
+
+  const filterName = useCallback(() => {
+    if (busca === undefined) {
+      const result = api.filter(({ name }) => name.toLowerCase()
+        .includes(nome.toLowerCase()));
+      // setElement(result);
+      return result;
+    }
+    const result = filtered;
+    // setElement(result);
+    return result;
+  }, [api, busca, filtered, nome]);
 
   useEffect(() => {
-    if (!isBusca || !isBusca.column) return;
-    const result = filtered.filter(({ name }) => name.toLowerCase()
-      .includes(isNome.toLowerCase()));
-
-    const filterBusca = result.filter((array) => (
-      isBusca !== undefined
+    if (busca === undefined) {
+      return setFiltered(filterName());
+    }
+    const filterBusca = filterName().filter((array) => (
+      busca !== undefined
         ? filterArray(array)
         : array));
-    setFiltered(filterBusca);
-  }, [filterArray, isApi, isBusca, isNome]);
+    return setFiltered(filterBusca);
+  }, [busca, filterArray]);
 
-  useEffect(() => {
-    if (filtered.length !== 0) return;
-    setFiltered(isApi);
-  }, [filtered.length, isApi]);
+  // useEffect(() => {
+  //   if (filtered.length !== 0) return;
+  //   setFiltered(api);
+  // }, [filtered.length, api]);
 
   return (
     <>
