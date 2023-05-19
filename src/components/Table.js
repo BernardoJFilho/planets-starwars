@@ -4,7 +4,6 @@ import AppContext from '../context/AppContext';
 export default function Table() {
   const { api, nome, busca } = useContext(AppContext);
   const [filtered, setFiltered] = useState(api);
-  // const [elemet, setElement] = useState(api);
 
   const filterArray = useCallback((array) => {
     if (!busca || !busca.column) return;
@@ -19,33 +18,22 @@ export default function Table() {
     }
   }, [busca]);
 
-  const filterName = useCallback(() => {
-    if (busca === undefined) {
-      const result = api.filter(({ name }) => name.toLowerCase()
-        .includes(nome.toLowerCase()));
-      // setElement(result);
-      return result;
-    }
-    const result = filtered;
-    // setElement(result);
-    return result;
-  }, [api, busca, filtered, nome]);
+  // const filter = () => {
+
+  // };
 
   useEffect(() => {
-    if (busca === undefined) {
-      return setFiltered(filterName());
-    }
-    const filterBusca = filterName().filter((array) => (
+    const filterBusca = filtered.filter((array) => (
       busca !== undefined
         ? filterArray(array)
         : array));
-    return setFiltered(filterBusca);
-  }, [busca, filterArray]);
+    setFiltered(filterBusca);
+  }, [busca]);
 
-  // useEffect(() => {
-  //   if (filtered.length !== 0) return;
-  //   setFiltered(api);
-  // }, [filtered.length, api]);
+  useEffect(() => {
+    if (filtered.length !== 0) return;
+    setFiltered(api);
+  }, [filtered, api]);
 
   return (
     <>
@@ -81,7 +69,8 @@ export default function Table() {
           <th>Editado</th>
           <th>Url</th>
         </tr>
-        { filtered
+        { filtered.filter(({ name }) => name.toLowerCase()
+          .includes(nome.toLowerCase()))
           .map((param, index) => (
             <tr key={ index }>
               <td data-testid="planet-name">{param.name}</td>

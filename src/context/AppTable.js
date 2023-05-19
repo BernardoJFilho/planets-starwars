@@ -20,7 +20,7 @@ export default function AppTable({ children }) {
 
   useEffect(() => {
     arrayApi();
-  }, [arrayApi, setApi]);
+  }, [arrayApi]);
 
   const values = useMemo(() => ({
     api, setApi, nome, handleChange, busca, setBusca,
