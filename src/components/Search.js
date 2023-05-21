@@ -1,17 +1,17 @@
 import React, { useContext, useState } from 'react';
 import AppContext from '../context/AppContext';
 
+const optionsValues = ['population',
+  'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
+
 export default function Search() {
+  const { isNome, handleChange, setBusca } = useContext(AppContext);
+  const [values, setValues] = useState(optionsValues);
   const [search, setSearch] = useState({
     column: 'population',
     comparison: 'maior que',
     number: 0,
   });
-  const { isNome, handleChange, setBusca } = useContext(AppContext);
-
-  const buttonclick = () => {
-    setBusca(search);
-  };
 
   const onChangeFunc = ({ target }) => {
     const { name, value } = target;
@@ -19,6 +19,11 @@ export default function Search() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const buttonclick = () => {
+    setValues(optionsValues.filter((item) => item !== search.column));
+    setBusca(search);
   };
 
   return (
@@ -41,11 +46,7 @@ export default function Search() {
             data-testid="column-filter"
             onChange={ onChangeFunc }
           >
-            <option>population</option>
-            <option>orbital_period</option>
-            <option>diameter</option>
-            <option>rotation_period</option>
-            <option>surface_water</option>
+            {values.map((param, index) => <option key={ index }>{param}</option>)}
           </select>
         </label>
         <label>

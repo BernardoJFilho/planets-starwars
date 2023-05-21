@@ -18,11 +18,8 @@ export default function Table() {
     }
   }, [busca]);
 
-  // const filter = () => {
-
-  // };
-
   useEffect(() => {
+    if (!busca || !busca.column) return;
     const filterBusca = filtered.filter((array) => (
       busca !== undefined
         ? filterArray(array)
