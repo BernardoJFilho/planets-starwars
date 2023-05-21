@@ -5,6 +5,8 @@ export default function Table() {
   const { api, nome, busca } = useContext(AppContext);
   const [filtered, setFiltered] = useState(api);
 
+  console.log(busca);
+
   const filterArray = useCallback((array) => {
     if (!busca || !busca.column) return;
     switch (busca.comparison) {

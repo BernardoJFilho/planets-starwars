@@ -1,12 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AppContext from '../context/AppContext';
 
-const optionsValues = ['population',
-  'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
-
 export default function Search() {
-  const { isNome, handleChange, setBusca } = useContext(AppContext);
-  const [values, setValues] = useState(optionsValues);
+  const {
+    isNome,
+    handleChange,
+    setBusca,
+    columnValues,
+    setColumsValues,
+    comparisonValues,
+  } = useContext(AppContext);
+
   const [search, setSearch] = useState({
     column: 'population',
     comparison: 'maior que',
@@ -22,9 +26,13 @@ export default function Search() {
   };
 
   const buttonclick = () => {
-    setValues(optionsValues.filter((item) => item !== search.column));
+    setColumsValues(columnValues.filter((item) => item !== search.column));
     setBusca(search);
   };
+
+  useEffect(() => {
+    setSearch((prev) => ({ ...prev, column: columnValues[0] }));
+  }, [columnValues]);
 
   return (
     <>
@@ -46,7 +54,7 @@ export default function Search() {
             data-testid="column-filter"
             onChange={ onChangeFunc }
           >
-            {values.map((param, index) => <option key={ index }>{param}</option>)}
+            {columnValues.map((param, index) => <option key={ index }>{param}</option>)}
           </select>
         </label>
         <label>
@@ -56,9 +64,8 @@ export default function Search() {
             data-testid="comparison-filter"
             onChange={ onChangeFunc }
           >
-            <option>maior que</option>
-            <option>menor que</option>
-            <option>igual a</option>
+            {comparisonValues.map((param, index) => (
+              <option key={ index }>{param}</option>))}
           </select>
         </label>
         <label>
