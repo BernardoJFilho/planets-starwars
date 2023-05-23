@@ -9,8 +9,9 @@ export default function Search() {
     columnValues,
     setColumsValues,
     comparisonValues,
+    setSubmet,
   } = useContext(AppContext);
-
+  const [stateFilter, setStateFilter] = useState({ column: 'population', sort: '' });
   const [search, setSearch] = useState({
     column: 'population',
     comparison: 'maior que',
@@ -28,6 +29,21 @@ export default function Search() {
   const buttonclick = () => {
     setColumsValues(columnValues.filter((item) => item !== search.column));
     setBusca(search);
+  };
+
+  const targetRadio = ({ target }) => {
+    setStateFilter((prev) => ({ ...prev, sort: target.value }));
+  };
+
+  const targetFilterValue = ({ target }) => {
+    setStateFilter((prev) => ({ ...prev, column: target.value }));
+  };
+
+  const submetFunc = () => {
+    setSubmet((prev) => (
+      { ...prev, order: { ...prev.order, sort: stateFilter.sort } }));
+    setSubmet((prev) => (
+      { ...prev, order: { ...prev.order, column: stateFilter.column } }));
   };
 
   useEffect(() => {
@@ -83,6 +99,38 @@ export default function Search() {
         >
           adicionar filtro
         </button>
+      </div>
+      <div>
+        <label>
+          <select
+            name="columnFilter"
+            data-testid="column-sort"
+            onChange={ targetFilterValue }
+          >
+            {columnValues.map((param, index) => <option key={ index }>{param}</option>)}
+          </select>
+        </label>
+        <form onChange={ targetRadio }>
+          <label>
+            <input
+              name="order"
+              type="radio"
+              data-testid="column-sort-input-asc"
+              value="ASC"
+            />
+            ASC
+          </label>
+          <label>
+            <input
+              name="order"
+              type="radio"
+              data-testid="column-sort-input-desc"
+              value="DESC"
+            />
+            DESC
+          </label>
+        </form>
+        <button data-testid="column-sort-button" onClick={ submetFunc }>Submeter</button>
       </div>
     </>
   );

@@ -2,10 +2,8 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import AppContext from '../context/AppContext';
 
 export default function Table() {
-  const { api, nome, busca } = useContext(AppContext);
+  const { api, nome, busca, submet } = useContext(AppContext);
   const [filtered, setFiltered] = useState(api);
-
-  console.log(busca);
 
   const filterArray = useCallback((array) => {
     if (!busca || !busca.column) return;
@@ -20,14 +18,35 @@ export default function Table() {
     }
   }, [busca]);
 
+  const ordernaArraySort = (a, b) => {
+    const { order } = submet;
+    if (order.sort === 'ASC') {
+      return a[order.column] - b[order.column];
+    }
+    if (order.sort === 'DESC') {
+      return b[order.column] - a[order.column];
+    }
+  };
+
+  const ordenaArray = () => {
+    const { order } = submet;
+    const hasData = api.filter((e) => e[order.column] !== 'unknown');
+    const isUnknown = api.filter((e) => e[order.column] === 'unknown');
+    const data = [...hasData.sort(ordernaArraySort), ...isUnknown];
+    return data;
+  };
+
   useEffect(() => {
+    if (submet.order.sort.length !== 0) {
+      setFiltered(ordenaArray());
+    }
     if (!busca || !busca.column) return;
     const filterBusca = filtered.filter((array) => (
       busca !== undefined
         ? filterArray(array)
         : array));
     setFiltered(filterBusca);
-  }, [busca]);
+  }, [busca, submet.order.sort.length]);
 
   useEffect(() => {
     if (filtered.length !== 0) return;
@@ -36,21 +55,6 @@ export default function Table() {
 
   return (
     <>
-      {/* {isBusca !== undefined ? test.map((param, index) => (
-        <div key={ index }>
-          Filtro
-          {' '}
-          {index}
-          :
-          <p>
-            {param.column}
-            {' '}
-            {param.comparison}
-            {' '}
-            {param.number}
-          </p>
-        </div>)) : null} */}
-      {/* {console.log(test[test.length - 1])} */}
       <div>Table</div>
       <table>
         <tr>

@@ -23,6 +23,7 @@ export default function AppTable({ children }) {
   const [busca, setBusca] = useState();
   const [columnValues, setColumsValues] = useState(columns);
   const [comparisonValues] = useState(comparison);
+  const [submet, setSubmet] = useState({ order: { column: '', sort: '' } });
 
   const arrayApi = useCallback(async () => {
     const response = await getApi();
@@ -48,7 +49,9 @@ export default function AppTable({ children }) {
     setColumsValues,
     columnValues,
     comparisonValues,
-  }), [api, busca, columnValues, comparisonValues, nome]);
+    setSubmet,
+    submet,
+  }), [api, busca, columnValues, comparisonValues, nome, submet]);
 
   return (
     <AppContext.Provider value={ values }>
