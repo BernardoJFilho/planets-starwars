@@ -20,19 +20,15 @@ export default function Table() {
 
   const ordernaArraySort = (a, b) => {
     const { order } = submet;
-    if (order.sort === 'ASC') {
-      return a[order.column] - b[order.column];
-    }
-    if (order.sort === 'DESC') {
-      return b[order.column] - a[order.column];
-    }
+    if (order.sort === 'ASC') return a[order.column] - b[order.column];
+    if (order.sort === 'DESC') return b[order.column] - a[order.column];
   };
 
   const ordenaArray = () => {
     const { order } = submet;
-    const hasData = api.filter((e) => e[order.column] !== 'unknown');
-    const isUnknown = api.filter((e) => e[order.column] === 'unknown');
-    const data = [...hasData.sort(ordernaArraySort), ...isUnknown];
+    const array1 = api.filter((e) => e[order.column] !== 'unknown');
+    const array2 = api.filter((e) => e[order.column] === 'unknown');
+    const data = [...array1.sort(ordernaArraySort), ...array2];
     return data;
   };
 
