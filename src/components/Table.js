@@ -1,12 +1,11 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AppContext from '../context/AppContext';
 
 export default function Table() {
   const { api, nome, busca, submet } = useContext(AppContext);
   const [filtered, setFiltered] = useState(api);
 
-  const filterArray = useCallback((array) => {
-    if (!busca || !busca.column) return;
+  const filterArray = (array) => {
     switch (busca.comparison) {
     case 'maior que':
       return Number(array[busca.column]) > Number(busca.number);
@@ -16,12 +15,12 @@ export default function Table() {
       return Number(array[busca.column]) === Number(busca.number);
     default:
     }
-  }, [busca]);
+  };
 
   const ordernaArraySort = (a, b) => {
     const { order } = submet;
     if (order.sort === 'ASC') return a[order.column] - b[order.column];
-    if (order.sort === 'DESC') return b[order.column] - a[order.column];
+    return b[order.column] - a[order.column];
   };
 
   const ordenaArray = () => {
@@ -37,10 +36,7 @@ export default function Table() {
       setFiltered(ordenaArray());
     }
     if (!busca || !busca.column) return;
-    const filterBusca = filtered.filter((array) => (
-      busca !== undefined
-        ? filterArray(array)
-        : array));
+    const filterBusca = filtered.filter((array) => filterArray(array));
     setFiltered(filterBusca);
   }, [busca, submet.order.sort.length]);
 
